@@ -5,7 +5,6 @@ if [[ "$OSTYPE" == linux* ]]; then
     if [[ -a $_vscode_path ]]; then
         vsc_run() { $_vscode_path $@ >/dev/null 2>&1 &| }
         alias vsc=vsc_run
-        break
     fi
 
 elif  [[ "$OSTYPE" = darwin* ]]; then
