@@ -24,17 +24,22 @@ elif  [[ "$OSTYPE" = darwin* ]]; then
 
 elif [[ "$OSTYPE" = 'cygwin' ]]; then
     local _vscode_cygwin_paths > /dev/null 2>&1
-    _vscode_cygwin_paths=(
-        "$(cygpath $ProgramW6432/Microsoft\ VS\ Code)/Code.exe"
-        "$(cygpath $ProgramFiles(x86)/Microsoft\ VS\ Code)/Code.exe"
-    )
-    for _vscode_path in $_vscode_cygwin_paths; do
-        if [[ -a $_vscode_path ]]; then
-            code () { "$_vscode_path" $* }
-            alias vsc=code
-            break
-        fi
-    done
+    local _vscode_path=$(which code)
 
+    if [[ ! -a $_vscode_path ]]; then
+        _vscode_cygwin_paths=(
+            "$(cygpath $ProgramW6432/Microsoft\ VS\ Code)/Code.exe"
+            "$(cygpath $ProgramFiles(x86)/Microsoft\ VS\ Code)/Code.exe"
+        )
+        for _vscode_path in $_vscode_cygwin_paths; do
+            if [[ -a $_vscode_path ]]; then
+                break
+            fi
+        done
+    fi
+
+    if [[ -a _vscode_path ]]; then
+        code () { "$_vscode_path" $* }
+        alias vsc=code
+    fi
 fi
-
